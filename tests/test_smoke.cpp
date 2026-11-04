@@ -18,10 +18,11 @@ TEST(Smoke, AllComponentsConstruct) {
     EXPECT_NO_THROW({
         adc::ManualClock clock;
         adc::Storage storage(dir.path());
-        [[maybe_unused]] adc::AccessControlManager access;
+        adc::AdcConfig cfg = adc_test::testConfig(dir);
+        adc::EventLogger logger(storage, clock);
+        adc::AccessControlManager access(logger, clock, cfg);
         [[maybe_unused]] adc::DispensingController dispensing;
-        [[maybe_unused]] adc::InventoryManager inventory;
-        [[maybe_unused]] adc::EventLogger logger(storage, clock);
+        [[maybe_unused]] adc::InventoryManager inventory(storage, logger, access, cfg);
         [[maybe_unused]] adc::FaultDetector faults;
         [[maybe_unused]] adc::OperationalModeManager modes;
         [[maybe_unused]] adc::CommunicationManager comms;
