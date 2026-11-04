@@ -9,6 +9,7 @@
 #include "adc/hardware_interface.hpp"
 #include "adc/inventory_manager.hpp"
 #include "adc/operational_mode_manager.hpp"
+#include "adc/simulated_cabinet.hpp"
 #include "adc/storage.hpp"
 #include "test_helpers.hpp"
 
@@ -26,6 +27,7 @@ TEST(Smoke, AllComponentsConstruct) {
         [[maybe_unused]] adc::FaultDetector faults;
         [[maybe_unused]] adc::OperationalModeManager modes;
         [[maybe_unused]] adc::CommunicationManager comms;
-        [[maybe_unused]] adc::HardwareInterface hardware;
+        adc::SimulatedCabinet cabinet(storage, cfg);
+        [[maybe_unused]] adc::HardwareInterface& hardware = cabinet;
     });
 }
