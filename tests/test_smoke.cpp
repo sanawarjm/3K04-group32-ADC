@@ -22,12 +22,13 @@ TEST(Smoke, AllComponentsConstruct) {
         adc::AdcConfig cfg = adc_test::testConfig(dir);
         adc::EventLogger logger(storage, clock);
         adc::AccessControlManager access(logger, clock, cfg);
-        [[maybe_unused]] adc::DispensingController dispensing;
-        [[maybe_unused]] adc::InventoryManager inventory(storage, logger, access, cfg);
+        adc::InventoryManager inventory(storage, logger, access, cfg);
         [[maybe_unused]] adc::CommunicationManager comms;
         adc::SimulatedCabinet cabinet(storage, cfg);
         adc::HardwareInterface& hardware = cabinet;
         adc::FaultDetector faults(hardware, logger, clock, cfg);
-        [[maybe_unused]] adc::OperationalModeManager modes(access, faults, logger, hardware);
+        adc::OperationalModeManager modes(access, faults, logger, hardware);
+        [[maybe_unused]] adc::DispensingController dispensing(access, inventory, modes, faults, hardware, logger,
+                                                              storage, clock, cfg);
     });
 }
