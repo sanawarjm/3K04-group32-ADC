@@ -16,11 +16,17 @@
 
 namespace {
 
+constexpr int kUsageError = 2;  // process exit code for a bad command line
+
 void usage() {
+    const adc::AdcConfig defaults;
     std::cout << "Usage: adc_app [--data-dir <folder>] [--reset] [--session-timeout <seconds>]\n"
-                 "  --data-dir         folder for inventory, event log and cabinet state (default: data)\n"
+                 "  --data-dir         folder for inventory, event log and cabinet state (default: "
+              << defaults.dataDir
+              << ")\n"
                  "  --reset            delete the ADC's own files in that folder first (fresh demo)\n"
-                 "  --session-timeout  inactivity sign-out time in seconds (default: 60)\n";
+                 "  --session-timeout  inactivity sign-out time in seconds (default: "
+              << std::chrono::duration_cast<std::chrono::seconds>(defaults.sessionTimeout).count() << ")\n";
 }
 
 }  // namespace
@@ -41,12 +47,12 @@ int main(int argc, char** argv) {
             const auto r = std::from_chars(text.data(), text.data() + text.size(), seconds);
             if (r.ec != std::errc() || r.ptr != text.data() + text.size() || seconds < 1) {
                 usage();
-                return 2;
+                return kUsageError;
             }
             config.sessionTimeout = std::chrono::seconds(seconds);
         } else {
             usage();
-            return arg == "--help" ? 0 : 2;
+            return arg == "--help" ? 0 : kUsageError;
         }
     }
     if (reset && !adc::Storage::resetDirectory(config.dataDir)) {

@@ -40,6 +40,7 @@ public:
     // SystemClock()
     // Post:        now() starts at 0 ms.
     SystemClock();
+    // now() / timestamp(): see Clock (the contracts are the same for every clock).
     std::chrono::milliseconds now() const override;
     std::string timestamp() const override;
 
@@ -60,6 +61,7 @@ public:
     // Effects:     none besides the clock value.
     void advance(std::chrono::milliseconds step);
 
+    // now() / timestamp(): see Clock (the contracts are the same for every clock).
     std::chrono::milliseconds now() const override;
     std::string timestamp() const override;
 
