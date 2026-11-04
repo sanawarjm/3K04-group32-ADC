@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "adc/access_control_manager.hpp"
+#include "adc/clock.hpp"
 #include "adc/communication_manager.hpp"
 #include "adc/dispensing_controller.hpp"
 #include "adc/event_logger.hpp"
@@ -8,14 +9,19 @@
 #include "adc/hardware_interface.hpp"
 #include "adc/inventory_manager.hpp"
 #include "adc/operational_mode_manager.hpp"
+#include "adc/storage.hpp"
+#include "test_helpers.hpp"
 
 // Checks that every D1 component header compiles and can be constructed.
 TEST(Smoke, AllComponentsConstruct) {
+    adc_test::TempDir dir;
     EXPECT_NO_THROW({
+        adc::ManualClock clock;
+        adc::Storage storage(dir.path());
         [[maybe_unused]] adc::AccessControlManager access;
         [[maybe_unused]] adc::DispensingController dispensing;
         [[maybe_unused]] adc::InventoryManager inventory;
-        [[maybe_unused]] adc::EventLogger logger;
+        [[maybe_unused]] adc::EventLogger logger(storage, clock);
         [[maybe_unused]] adc::FaultDetector faults;
         [[maybe_unused]] adc::OperationalModeManager modes;
         [[maybe_unused]] adc::CommunicationManager comms;
