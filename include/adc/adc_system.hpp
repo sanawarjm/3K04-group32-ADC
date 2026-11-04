@@ -62,15 +62,27 @@ public:
     void tick();
 
     // ---- read-only views (copies, taken under the lock) for tests and the demo --------------
+    // Each view: Pre none; Post a copy of the named value, taken under the lock; Effects none;
+    // Exceptions none. Used by tests and the scenario scripts only.
+    // mode() -> SM1 state.
     Mode mode() const;
+    // link() -> SM3 state.
     LinkState link() const;
+    // dispenseState() -> SM2 state of the current / last session.
     DispenseState dispenseState() const;
+    // quantityOf(medication) -> recorded quantity.
     int quantityOf(const MedicationId& medication) const;
+    // events() -> every audit record.
     std::vector<EventRecord> events() const;
+    // monitorReceived() -> what the stand-in Monitoring System stored.
     std::vector<ReceivedMessage> monitorReceived() const;
+    // monitorDuplicates() -> repeated message IDs the stand-in dropped.
     int monitorDuplicates() const;
+    // cabinet() -> physical state of the simulated cabinet.
     CabinetSnapshot cabinet() const;
+    // signedIn() -> true while a user is signed in.
     bool signedIn() const;
+    // unsentEvents() / unsentMessages() -> what the Monitoring System has not confirmed yet.
     int unsentEvents() const;
     int unsentMessages() const;
 

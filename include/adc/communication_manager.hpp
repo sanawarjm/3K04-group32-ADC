@@ -116,6 +116,7 @@ public:
 
     // unsentEventCount() -> events not yet acknowledged; unsentMessageCount() -> outbox size.
     int unsentEventCount() const;
+    // (unsentMessageCount: see above)
     int unsentMessageCount() const;
 
     // lastAckedEventId() -> the event cursor (INV-COM-1).

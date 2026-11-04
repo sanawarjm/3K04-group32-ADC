@@ -58,11 +58,19 @@ public:
     // Effects:     may write the "cabinet" file.
     SimulatedCabinet(Storage& storage, const AdcConfig& config);
 
+    // HardwareInterface operations (contracts in hardware_interface.hpp). Simulator behaviour:
+    // drawers() -> config.drawers.
     std::vector<DrawerId> drawers() const override;
+    // i_drawerOpen(d) -> m_drawerOpen(d); empty while simFailSensor(d, true).
     std::optional<bool> i_drawerOpen(const DrawerId& d) const override;
+    // i_lockEngaged(d) -> m_lockEngaged(d); empty while the sensors of d are failed.
     std::optional<bool> i_lockEngaged(const DrawerId& d) const override;
+    // i_itemCount(d) -> m_itemCount(d); empty while the sensors of d are failed.
     std::optional<int> i_itemCount(const DrawerId& d) const override;
+    // o_setLock(d, cmd) -> c_lock(d) = cmd; UNLOCKED disengages at once, LOCKED engages per NAT-4.
+    //                      Effects: physical state saved.
     void o_setLock(const DrawerId& d, LockCommand cmd) override;
+    // o_setIndicator(level, text) -> c_light, c_buzzer, c_display (read back with snapshot()).
     void o_setIndicator(IndicatorLevel level, const std::string& text) override;
 
     // ---- simulator-only controls (test harness) ----------------------------------------------
