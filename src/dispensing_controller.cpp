@@ -332,7 +332,7 @@ OpResult DispensingController::cancel() {
     const DispenseState before = state_;
     const OpResult r = fire(DispenseEvent::CancelRequest, "cancelled by user");
     if (r.ok() && state_ == DispenseState::Cancelled && before != DispenseState::Cancelled)
-        return OpResult::success("Request cancelled. Drawer " + drawer_ + " is locked.");
+        return OpResult::success("Request cancelled. Drawer " + drawer_ + " is locking.");
     return r;
 }
 
@@ -482,6 +482,7 @@ SessionInfo DispensingController::session() const {
     const auto left = deadline_ - clock_.now();
     s.timeLeft = (timed && left.count() > 0) ? left : std::chrono::milliseconds(0);
     s.drawerUnderControl = tracking_;
+    s.controlledDrawer = tracking_ ? trackedDrawer_ : DrawerId();
     return s;
 }
 

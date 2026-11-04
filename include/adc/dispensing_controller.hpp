@@ -66,7 +66,8 @@ struct SessionInfo {
     int requested = 0;  // units requested (dispense only)
     int moved = 0;      // units removed (dispense) or added (replenish) so far
     std::chrono::milliseconds timeLeft{0};  // until the running SM2 timer fires
-    bool drawerUnderControl = false;        // the drawer is still tracked until it is closed
+    bool drawerUnderControl = false;        // a drawer is still tracked until it is seen closed
+    DrawerId controlledDrawer;              // that drawer (may belong to an earlier session)
 };
 
 // One cell of a state machine table, as text, for tests and documentation. A value record.
