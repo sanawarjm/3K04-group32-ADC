@@ -1,0 +1,25 @@
+# Build output
+build/
+out/
+cmake-build-*/
+*.o
+*.obj
+*.exe
+*.a
+*.lib
+*.so
+*.dll
+*.pdb
+
+# IDE
+.vscode/
+.idea/
+.vs/
+
+# Runtime data written by the ADC
+data/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
