@@ -5,6 +5,7 @@
 #include "adc/communication_manager.hpp"
 #include "adc/dispensing_controller.hpp"
 #include "adc/event_logger.hpp"
+#include "adc/fake_monitor.hpp"
 #include "adc/fault_detector.hpp"
 #include "adc/hardware_interface.hpp"
 #include "adc/inventory_manager.hpp"
@@ -23,12 +24,13 @@ TEST(Smoke, AllComponentsConstruct) {
         adc::EventLogger logger(storage, clock);
         adc::AccessControlManager access(logger, clock, cfg);
         adc::InventoryManager inventory(storage, logger, access, cfg);
-        [[maybe_unused]] adc::CommunicationManager comms;
         adc::SimulatedCabinet cabinet(storage, cfg);
         adc::HardwareInterface& hardware = cabinet;
         adc::FaultDetector faults(hardware, logger, clock, cfg);
         adc::OperationalModeManager modes(access, faults, logger, hardware);
         [[maybe_unused]] adc::DispensingController dispensing(access, inventory, modes, faults, hardware, logger,
                                                               storage, clock, cfg);
+        adc::FakeMonitor monitor;
+        [[maybe_unused]] adc::CommunicationManager comms(monitor, logger, storage, clock, cfg);
     });
 }
