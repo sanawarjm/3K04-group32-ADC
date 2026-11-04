@@ -24,10 +24,10 @@ TEST(Smoke, AllComponentsConstruct) {
         adc::AccessControlManager access(logger, clock, cfg);
         [[maybe_unused]] adc::DispensingController dispensing;
         [[maybe_unused]] adc::InventoryManager inventory(storage, logger, access, cfg);
-        [[maybe_unused]] adc::FaultDetector faults;
-        [[maybe_unused]] adc::OperationalModeManager modes;
         [[maybe_unused]] adc::CommunicationManager comms;
         adc::SimulatedCabinet cabinet(storage, cfg);
-        [[maybe_unused]] adc::HardwareInterface& hardware = cabinet;
+        adc::HardwareInterface& hardware = cabinet;
+        adc::FaultDetector faults(hardware, logger, clock, cfg);
+        [[maybe_unused]] adc::OperationalModeManager modes(access, faults, logger, hardware);
     });
 }
